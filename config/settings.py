@@ -24,7 +24,7 @@ SECRET_KEY = 'django-insecure-h&d4y(59y-nz$_xp%bqay*y&rf75bbsbp)4r=&f_do5j!mxw$=
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.86.248', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['192.168.86.248', '127.0.0.1', 'localhost', '*']
 
 #for proper logout
 LOGOUT_REDIRECT_URL = '/'
@@ -58,6 +58,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -87,13 +88,13 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
+     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'grad_project',
-        'USER' : 'root',
-        'PASSWORD' : '',
-        'HOST' : '127.0.0.1',
-        'PORT' : '3306'
+        'NAME': os.environ.get('grad_project'),
+        'USER': os.environ.get('root'),
+        'PASSWORD': os.environ.get(''),
+        'HOST': os.environ.get('127.0.0.1'),
+        'PORT': '3306',
     }
 }
 

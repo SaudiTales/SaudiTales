@@ -1,7 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-  console.log("theme.js loaded");
-
   document.addEventListener("click", function (e) {
       const btn = e.target.closest(".mod-btn");
 

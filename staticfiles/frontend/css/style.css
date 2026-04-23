@@ -851,14 +851,19 @@ a {
 .explore-results .results-row {
   display: flex;
   flex-wrap: nowrap;
-  gap: 24px;
-  overflow-x: auto;
+  gap: 10px;
+  /* overflow-x: auto; */
   padding-bottom: 10px;
 }
 
 .result-card {
   flex: 0 0 auto;
   width: 300px;
+  height: 100%;
+}
+
+.explore-results .card {
+  min-height: 400px;
 }
 
 .explore-results h4,
@@ -893,6 +898,18 @@ a {
   border-radius: 15px;
   height: auto;
   padding-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.explore-results .card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 140px;
+  padding: 10px 16px 0;
+  text-align: center;
 }
 
 .explore-results img {
@@ -906,18 +923,39 @@ a {
 .explore-results .card-title {
   color: var(--text-primary);
   padding: 10px 0;
-  align-items: center;
   text-align: center;
+  /* white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word; */
+  margin-bottom: 16px;
+  /* display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical; */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 3.5rem;
 }
 
 .explore-results .view-btn {
   background-color: var(--primary);
   color: var(--bg-secondary);
-  margin: 8px 16px;
+  margin: 8px auto 16px;
   padding: 8px 24px;
   border: none;
   border-radius: 25px;
   font-size: 1.25rem;
+  display: inline-flex;
+  justify-content: center;
+}
+
+.explore-results .card-body a {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+.explore-results .card-body h5 {
+  width: 100%;
 }
 
 .explore-results .view-btn:hover {
@@ -964,10 +1002,11 @@ a {
 
 .place-header {
   display: flex;
-  align-items: start;
+  align-items: center;
   gap: 12px;
   padding: 20px 10px 8px 10px;
   font-family: "Trirong", serif;
+  flex-wrap: wrap;
 }
 
 .place-description {
@@ -977,8 +1016,12 @@ a {
 }
 
 .place-name {
-  padding-right: 30%;
-  display: inline-block;
+  flex: 1 1 0;
+  min-width: 0;
+  white-space: normal;
+  word-break: break-word;
+  margin: 0;
+  padding-right: 0;
 }
 
 /* الجوال فقط */
@@ -1213,6 +1256,9 @@ a {
   font-family: "Trirong", serif;
   color: var(--text-primary);
   flex-grow: 1;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .fav-sec .card:hover,
