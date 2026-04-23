@@ -1,0 +1,134 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% block title %} Explore Result {% endblock title %}
+{% block content %}
+<!-- found result -->
+<section class="explore-results fade-in">
+    
+    {% if landmark %}
+        <h4>Searching Results for "{{ query }}"</h4>
+        <hr> <!-- line -->
+        <div class="results-list">
+            <div class="results-row d-flex flex-wrap">
+                <div class="result-card">
+                    <div class="card">
+                        <img src="{{ landmark.Image_Url }}" alt="{{ landmark.Landmark_Name }}" width="100px" height="100px">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ landmark.Landmark_Name }}</h5>
+                            <a href="{% url 'infoPlace' landmark.id %}">
+                                <button class="view-btn">View</button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% if related_landmarks %}
+            <hr>
+            <h5>Related Places</h5>
+
+            <div class="results-row d-flex flex-wrap">
+                {% for l in related_landmarks %}
+                    <div class="result-card">
+                        <div class="card">
+                            <img src="{{ l.Image_Url }}" width="100">
+                            <div class="card-body">
+                                <h5>{{ l.Landmark_Name }}</h5>
+                                <a href="{% url 'infoPlace' l.id %}">
+                                    <button class="view-btn">View</button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% elif top_landmarks %}
+        {% if search_type == "image" %}
+            <h4>No matching landmark found</h4>
+            <p>Here are the closest visual matches we found</p>
+        {% else %}
+            <h4>Searching Results for "{{query}}"</h4>
+        {% endif %}
+        <hr> <!-- line -->
+        <div class="results-list">
+            <div class="results-row d-flex flex-wrap">
+                {% for l in top_landmarks %}
+                <div class="result-card">
+                    <div class="card">
+                        <img src="{{ l.Image_Url }}" alt="{{ l.Landmark_Name }}" width="100px" height="100px">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ l.Landmark_Name }}</h5>
+                            <a href="{% url 'infoPlace' l.id %}">
+                                <button class="view-btn">View</button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% else%}
+    <!-- not found result page -->
+        <p>No results found for "{{ query }}"</p>
+        <h4>other Places</h4>
+        <hr> <!-- line -->
+        <div class="results-list">
+            <div class="results-row d-flex flex-wrap">
+                {% for l in random_landmarks %}
+                <div class="result-card">
+                    <div class="card">
+                        <img src="{{ l.Image_Url }}" alt="{{ l.Landmark_Name }}" width="100px" height="100px">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ l.Landmark_Name }}</h5>
+                            <a href="{% url 'infoPlace' l.id %}">
+                                <button class="view-btn">View</button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+</section>
+<!--//////////////-->
+
+
+<!-- filter results -->
+ {% if explore_landmarks %}
+ <section class="explore-results fade-in">
+    <div class="d-flex justify-content-center">
+        <div class="d-flex align-items-center gap-3 flex-wrap">
+            <h4 class="mb-0">Searching Results for "{{ query }}"</h4>
+        </div>
+    </div>
+    <hr> <!-- line -->
+    <div class="results-row d-flex flex-wrap">
+
+        {% for l in explore_landmarks %}
+        <div class="result-card">
+            <div class="card">
+                <img src="{{ l.Image_Url }}">
+                <h5>{{ l.Landmark_Name }}</h5>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+</section>
+{% endif %}
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll('.option').forEach(opt => {
+        opt.addEventListener('click', function () {
+
+            document.getElementById('regionInput').value = this.dataset.value;
+
+            //document.querySelector(".search-form").submit();
+        });
+    });
+});
+</script>
+{% endblock content %}

@@ -1,0 +1,95 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% block title %} Home {% endblock title %}
+{% block content %}
+<!-- Hero Section -->
+<section class="herosection">
+    <div class="BackColor">
+        <div class="BackImage">
+            <div class="Hero-content">
+                <h1 class="slide-right">Saudi Tales</h1>
+                <p class="slide-left">Discover Saudi heritage through a single lens.</p>
+                <p class="slide-left"> A digital platform that showcases Saudi heritage and helps identify historical landmarks
+                    through
+                    images, providing rich information and stories that reflect the Kingdom’s identity and
+                    culture.
+                </p>
+            </div>
+            <a href="/explore/">
+                <button class="btn-explore slide-right">Explore Now</button>
+            </a>
+        </div>
+    </div>
+</section>
+<!-- Steps section -->
+<section class="steps-section container reveal">
+    <div class="row row-cols-auto text-center">
+        <div class="step col">
+            <div class="step-icon">
+                <img src="{% static 'frontend/Images/photo.png' %}" alt="upload icon">
+            </div>
+            <p class="step-text">Upload an image</p>
+        </div>
+        <div class="step col">
+            <div class="step-icon">
+                <img src="{% static 'frontend/Images/image-recognition.png' %}" alt="image recognition icon">
+            </div>
+            <p class="step-text">The system identifies the landmark</p>
+        </div>
+        <div class="step col">
+            <div class="step-icon">
+                <img src="{% static 'frontend/Images/book.png' %}" alt="book icon">
+            </div>
+            <p class="step-text">Discover its history and stories</p>
+        </div>
+        <div class="step col">
+            <div class="step-icon">
+                <img src="{% static 'frontend/Images/shared-folder.png' %}" alt="share icon">
+            </div>
+            <p class="step-text">Share and explore more</p>
+        </div>
+    </div>
+</section>
+<!-- Popular Landmarks Section -->
+<section class="popular-land reveal">
+    <h3 class="section-title text-center ">Popular Landmarks</h3>
+    <div class="row row-cols-auto land-container">
+        {% for place in popular_landmarks %}
+        <div class="col">
+            <a href="{% url 'infoPlace' place.id %}">
+                <div class="place-card" style="background-image: url('{{ place.Image_Url }}');">
+                    <div class="card-overly">
+                        <h6>{{ place.Landmark_Name }}</h6>
+                        <p>{{ place.Description|truncatewords:25 }}</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+<section id="about">
+    <!-- Saudi Map Section -->
+    <section class="saudi-map py-5 section-space reveal">
+        <div class="row row-cols-auto saudi-map">
+            <div class="col map">
+                <img src="static/frontend/Images/SaudiMap.png" alt="Saudi Arabia Map">
+            </div>
+            <div class="col map-text">
+                <h5 class="mb-4">Saudi Identity… A History Told Through Place</h5>
+                <p class="mb-3">
+                    The Kingdom of Saudi Arabia possesses a rich cultural and historical heritage that spans
+                    centuries,
+                    reflected in its historical landmarks and diverse traditions across different regions. Through
+                    our
+                    platform, we aim to document this heritage, introduce it to visitors, and support cultural
+                    tourism
+                    through a digital experience that highlights the Kingdom’s identity and preserves its stories
+                    for
+                    future generations.
+                </p>
+            </div>
+        </div>
+    </section>
+</section>
+{% endblock content %}

@@ -1,0 +1,77 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% block title %} Explore Landmarks {% endblock title %}
+{% block content %}
+
+{% if error_message %}
+    <div class="alert alert-warning text-center mt-3">
+        {{ error_message }}
+    </div>
+{% endif %}
+
+<section class="search-section fade-in" style="margin-top: 112px;">
+    <div class="container text-center d-flex flex-column align-items-center justify-content-center">
+        <h5 class="explore-title">Explore Landmarks easily using text search or by uploading an image of a landmark</h5>
+        <!-- manual search -->
+        <div class="row my-4">
+            <form action="{% url 'exploreResult' %}" method="get" class="search-form">
+                <div class="col-auto manual-search align-items-center gap-3 d-flex flex-warp">
+                    <!-- search text -->
+                    <input type="search" id="searchInput" name="q" class="form-control" placeholder="Search for landmarks..." minlength="3">
+                   
+                    <input type="hidden" name="region" id="regionInput">
+                    <!-- custom dropdown -->
+                    <div class="custom-select">
+                        <button class="filter-btn dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-funnel"></i>filter</button>
+                        <div class="options-list">
+                            <div class="option active" data-value="Riyadh">Riyadh</div>
+                            <div class="option active" data-value="Qassim">Qassim</div>
+                            <div class="option" data-value="Aseer">Aseer</div>
+                            <div class="option" data-value="Dammam">Dammam</div>
+                            <div class="option" data-value="Madinah">Madinah</div>
+                            <div class="option" data-value="Taif">Taif</div>
+                            <div class="option" data-value="Najran">Najran</div>
+                            <div class="option" data-value="Al-Jubail">Al Jubail</div>
+                            <div class="option" data-value="Al-Baha">Al Baha</div>
+                            <div class="option" data-value="Hail">Hail</div>
+                            <div class="option" data-value="Jazan">Jazan</div>
+                            <div class="option" data-value="diriyah">Diriyah</div>
+                            <div class="option" data-value="Al-Ahsa">Al Ahsa</div>
+                            <div class="option" data-value="Jeddah">Jeddah</div>
+                            <div class="option" data-value="Tabuk">Tabuk</div>
+                            <div class="option" data-value="Al-Ula">AlUla</div>
+                        </div>
+                    </div>
+                    <!-- submit btn -->
+                    <button class="search-btn" type="submit">Search</button>
+            </form>
+            <small id="searchError" style="color:red; display:none; margin-top:5px; font-weight:500;"></small>
+        </div>
+    </div>
+
+    <!-- AI image recognition search -->
+    <form method="POST" action="{% url 'predict_landmark' %}" enctype="multipart/form-data" id='imageSearchForm'>
+        {% csrf_token %}
+        <div class="row my-4 search-container">
+            <div class="col-auto">
+                <div class="image-search align-items-center gap-3">
+                    <div class="dashed-line">
+                        <label class="upload-img">
+                            <input type="file" id="ImageInput" name="image" accept="image/*" hidden>
+                            <img id="previewImage" src="{% static 'frontend/Images/Uploadimg-search.png' %}" alt="upload image" width="100px" height="100px">
+                            <br>
+                            <span class="text" id="uploadText">Click to upload or capture an image</span>
+                            <small id="errorText" style="color:red; display:none;"></small>
+                        </label>
+                    </div>
+                </div>
+                <br>
+                <!--- Search button -->
+                <div class="search-btn-wrapper">
+                    <button type="submit" class="search-btn">Search</button>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock content %}

@@ -1,0 +1,162 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% block title %} Profile {% endblock title %}
+{% block content %}
+<div class="container">
+    <!-- user information section -->
+    <section class="user-sec">
+        <div class="row">
+            <!-- user image profile -->
+            <div class="col-12 col-md-2 col-ms-2 d-flex align-items-center justify-content-center">
+                <img src="{% static 'frontend/Images/HeroImage.jpg' %}" alt="Profile Image" class="rounded-circle">
+            </div>
+            <!-- user information -->
+            <div class="col-12 col-md-4 col-ms-4 text-center text-md-start user-info-container">
+                <h5>{{user.first_name|default:user.username}}</h5>
+                <h5>@{{user.username}}</h5>
+                <h5>{{user.email}}</h5>
+                <i class="bi bi-pencil-square edit-icon" data-bs-toggle="modal" data-bs-target="#EditingForm"></i>
+            </div>
+        </div>
+    </section>
+    <hr>
+    <section class="fav-sec">
+        <h4>Favorite Places</h4>
+        <div class="row">
+            {% for landmark in favorites %}
+            <div class="col">
+                <a href="{% url 'infoPlace' landmark.id %}">
+                    <div class="card">
+                        <img src="{{ landmark.Image_Url }}" 
+                            alt="{{ landmark.Landmark_Name }}" 
+                            class="card-img-top">
+                        <div class="card-body text-center">
+                            <h6 class="card-title">{{ landmark.Landmark_Name }}</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% empty %}
+            <p>You have not favorited any places yet.</p>
+            {% endfor %}
+        </div>
+    </section>
+    <section class="share-sec">
+        <h4>Your Shared Stories/Comments</h4>
+        <div class="row">
+            <!-- loop to show all cards that the user comment in -->
+            {% for story in user_stories %}
+            <div class="col"> <!-- each card on col -->
+                <a href="{% url 'infoPlace' story.landmark.id %}">
+                    <div class="card">
+                        <img src="{{ story.landmark.Image_Url }}" alt="{{ story.landmark.Landmark_Name }}">
+                        <h6>{{ story.landmark.Landmark_Name }}</h6>
+                    </div>
+                </a>
+            </div>
+            {% empty %}
+            <p>You haven’t shared any stories yet.</p>
+            {% endfor %}
+        </div>
+    </section>
+    <div class="logout-sec">
+        <form action="{% url 'logout' %}" method="post">
+            {% csrf_token %}
+            <button class="btn btn-outline-danger logout-btn">
+                Log Out <i class="bi bi-box-arrow-right"></i>
+            </button>
+        </form>
+    </div>
+
+    <!-- edit user info form -->
+    <div class="modal fade" id="EditingForm">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <!-- form header -->
+                <div class="modal-header">
+                    <h2>Edit user information</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <!-- form body -->
+                <div class="modal-body">
+
+                    <!--this to show messages if the new name/email already exists-->
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert {% if message.tags == 'success' %}alert-success{% else %}alert-warning{% endif %}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <form method="POST" action="{% url 'profile' %}" id="myEditingForm">
+                        {% csrf_token %}
+                        <div class="inputField">
+                            <div class="mb-3">
+                                <label for="edit_nameprofil">Name: </label>
+                                <input type="text" id="edit_nameprofil" name="first_name" class="form-control" value="{{ user.first_name }}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="edit_userprofil">Username: </label>
+                                <input type="text" id="edit_userprofil" name="username" class="form-control" value="{{ user.username }}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="edit_email">Email: </label>
+                                <input type="email" id="edit_email" name="email" class="form-control" value="{{ user.email }}">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- form footer -->
+                <div class="modal-footer">
+                    <button class="btn btn-success" form="myEditingForm" type="submit">Save</button>
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--
+this is for updating the display name in profile page
+<div class="modal fade" id="editNameModal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5>Edit Name</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="text" name="first_name"
+                           value="{{ user.first_name }}"
+                           class="form-control"
+                           placeholder="Enter your name">
+                    
+                    <div class="mt-3 text-end">
+                        <button type="submit" class="btn btn-success">Save</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+-->
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // If there are messages, open the modal automatically
+    const messagesExist = document.querySelectorAll('.alert').length > 0;
+    if (messagesExist) {
+        const myModal = new bootstrap.Modal(document.getElementById('EditingForm'));
+        myModal.show();
+    }
+});
+</script>
+
+{% endblock content %}

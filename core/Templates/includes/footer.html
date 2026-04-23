@@ -1,0 +1,52 @@
+{% load static %}
+<footer class="footer" style="margin-top: 64px;">
+    <div class="container-footer reveal">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="logo">
+                    <a href="/">
+                        <img src="{% static 'frontend/Images/Logo.png' %}" alt="Saudi Tales Logo" width="200px" height="200px">
+                    </a>
+                </div>
+                <div class="logo-text">
+                    <p>
+                        Preserving heritage through technology
+                    </p>
+                </div>
+            </div>
+            <div class="col-6 col-md-4" style="padding-top: 24px;">
+                <h6 class="footer-title">Quick Links</h6>
+                <ul class="footer-links list-unstyled">
+                    <li><a class="footer-item" href="/">home</a></li>
+                    <li><a class="footer-item" href="/explore/">Explore Landmarks</a></li>
+                    <li><a class="footer-item" href="{% url 'home' %}#about">About Us</a></li>
+                    <li class="footer-item">Privacy Policy</li>
+                </ul>
+            </div>
+            <div class="col-6 col-md-4" style="padding-top: 24px;">
+                <h6 class="footer-title">Contact Us</h6>
+                <p> <!-- mailto will open user email app-->
+                    Email:
+                    <a href="mailto:sauditales0@gmail.com">sauditales0@gmail.com <br>
+                
+                    Saudi Arabia</br>
+                    <a href="https://www.instagram.com/sauditale.co/" target="_blank">
+                        <i class="bi bi-instagram"></i>
+                    </a>
+                    <a href="https://www.tiktok.com/@sauditales.co" target="_blank">
+                        <i class="bi bi-tiktok"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/saudi-tales-846bb9404" target="_blank">
+                        <i class="bi bi-linkedin"></i>
+                    </a>
+                    <a href="https://x.com/sauditales_co" target="_blank">
+                        <i class="bi bi-twitter-x"></i>
+                    </a>
+                </p>
+            </div>
+        </div>
+        <div class="row text-center">
+            <p class="copys">&copy; 2026 Saudi Tales. All rights reserved.</p>
+        </div>
+    </div>
+</footer>

@@ -1,0 +1,67 @@
+{% load static %}
+
+<!-- <div class="wrapper"> -->
+<aside id="sidebar">
+  <!-- sidebar navbar items -->
+  <div class="h-100">
+    <div>
+      <h3 class="title">Dashboard</h3>
+      <ul class="sidebar-nav-items">
+        <li>
+          <a href="/dashboard/"><i class="bi bi-house-door-fill"></i> Home</a>
+        </li>
+        <li>
+          <a href="/landmarks/"><i class="bi bi-geo-alt-fill"></i> Landmarks</a>
+        </li>
+        <li>
+          <a href="/accountMang/"
+            ><i class="bi bi-person-fill"></i> Account Management</a
+          >
+        </li>
+      </ul>
+    </div>
+    <div class="admin-footer">
+      <hr />
+      <p>Admin</p>
+      <form action="{% url 'logout' %}" method="post">
+          {% csrf_token %}
+          <button type="submit" class="logout-btn">
+              Log Out <i class="bi bi-box-arrow-right"></i>
+          </button>
+      </form>
+    </div>
+  </div>
+</aside>
+<!-- <div class="main"> -->
+<nav class="navbar" id="top-navbar">
+  <div
+    class="menu-container d-flex justify-content-between align-items-center w-100"
+  >
+    <!-- left: menu, mood, language -->
+    <div class="nav-left d-flex align-items-center gap-3">
+      <!-- menu btn -->
+      <button class="btn menu-btn" id="menu-btn">
+        <i class="bi bi-list"></i>
+      </button>
+      <!-- mod btn -->
+      <button class="mod-btn" id="theme-toggle">
+        <i class="bi bi-brightness-high-fill"></i>
+      </button>
+      <!-- language btn -->
+      {% comment %} <button class="lang-btn">
+        <span>ع</span>
+      </button> {% endcomment %}
+    </div>
+    <!-- right: logo -->
+    <div class="d-flex align-items-center gap-3">
+      <a href="/dashboard/">
+        <img
+          src="{% static 'frontend/Images/Logo.png' %}"
+          alt="logo"
+          width="100px"
+          height="100px"
+        />
+      </a>
+    </div>
+  </div>
+</nav>

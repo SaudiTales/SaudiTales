@@ -1,0 +1,171 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% block title %} Place Information {% endblock title %}
+{% block content %}
+<section class="info-place fade-in">
+    <div class="container text-center justify-content-center">
+        <!-- place image -->
+        <div class="row place-info">
+            <div class="col-12 col-md-6"> <!--place image-->
+                <img src="{{ place.Image_Url }}" alt="{{ place.Landmark_Name }}" width="400px">
+            </div>
+            <div class="col-12 col-md-6"> <!--place information-->
+                <div class="place-header d-flex">
+                    <h5 class="place-name">{{ place.Landmark_Name }}</h5>
+                    {% if user.is_authenticated %}
+                        <form method="POST" action="{% url 'toggle_favorite' place.id %}">
+                            {% csrf_token %}
+
+                            <button type="submit"
+                                class="btn like-btn {% if is_favorite %}btn-danger{% else %}btn-outline-danger{% endif %}">
+                                
+                                <i class="bi {% if is_favorite %}bi-heart-fill{% else %}bi-heart{% endif %}"></i>
+                                
+                            </button>
+
+                        </form>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-outline-danger like-btn">
+                            <i class="bi bi-heart"></i>
+                        </a>
+                    {% endif %}
+                    <button class="share-btn" id="shareBtn">
+                        <i class="bi bi-upload"></i>
+                    </button>
+                </div>
+                <!-- place description -->
+                <div class="place-description">
+                    <p>{{place.Description}}</p>
+                </div>
+            </div>
+        </div>
+        <!-- users comments -->
+        <div class="row users-comments py-5 mt-4">
+            <!-- if user is registered -->
+            <div class="col">
+                <h5 class="title">Users Comments</h5>
+                {% if user.is_authenticated %}
+                    <div class="comment-box p-3 mb-3">
+                            <!--to get the comments from DB-->
+                            {% for story in stories %}
+                            <p class="comment-text">
+                                <strong class="comment-user">
+                                    {{ story.user.first_name|default:story.user.username }}:
+                                 </strong>:
+                                {{ story.content }}
+                            </p>
+                        {% empty %}
+                            <p>No comments yet.</p>
+                        {% endfor %}
+
+                        <!--to write comments-->
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div class="text-comment d-flex align-items-center justify-content-center">
+                                <input type="text"
+                                    name="comment"
+                                    class="form-control"
+                                    placeholder="What do you think?"
+                                    required>
+                                <button type="submit" class="submit">
+                                    <i class="bi bi-arrow-up-circle"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                {% else %}
+                <!-- elif user is visitor  -->
+                <div class="col locked-comments">
+                    <div class="comment-box blurred p-3 mb-3">
+                        <p class="comment-text">⭐ This place is amazing! I loved exploring the history and architecture of
+                            the
+                            Masmak Fortress. A must-visit for anyone interested in Saudi heritage.</p>
+                        <p class="comment-text">⭐ This place is amazing! I loved exploring the history and architecture of
+                            the
+                            Masmak Fortress. A must-visit for anyone interested in Saudi heritage.</p>
+                        <p class="comment-text">⭐ This place is amazing! I loved exploring the history and architecture of
+                            the
+                            Masmak Fortress. A must-visit for anyone interested in Saudi heritage.</p>
+                        <p class="comment-text">⭐ This place is amazing! I loved exploring the history and architecture of
+                            the
+                        <!-- add comments text -->
+                        <div class="text-comment d-flex align-items-center justify-content-center">
+                            <input type="text" class="form-control mt-0" placeholder="What do you think?"><button
+                                class="submit"><i class="bi bi-arrow-up-circle"></i></button>
+                        </div>
+                    </div>
+                    <div class="locked-overly">
+                        <p>
+                            <a href="{% url 'login' %}" class="login-link">
+                                Sign Up
+                            </a>
+                            to see all users comments and stories!
+                        </p>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+    </div>
+</section>
+
+<!--activating share button-->
+<script>
+document.getElementById("shareBtn").addEventListener("click", async () => {
+    const shareData = {
+        title: document.title,
+        text: "Check out {{place.Landmark_Name}} on SaudiTales! Discover its history and details below:!",
+        url: window.location.href
+    };
+
+    // If browser supports native share such as in mobile phones
+    if (navigator.share) {
+        try {
+            await navigator.share(shareData);
+        } catch (err) {
+            console.log("Share cancelled");
+        }
+    } else { 
+        //if it is not mobile phone, then it is on desktop. so copy the link.
+        navigator.clipboard.writeText(window.location.href);
+        alert("Link copied to clipboard!");
+    }
+});
+</script>
+
+<!--left align the comments-->
+<style>
+.comment-box {
+    text-align: left;
+}
+</style>
+<!--when comments are hidden, enable link at'sign up' to redirect to sign up page-->
+<style>
+.login-link {
+    color: black;
+    text-decoration: underline;
+    font-weight: 800;
+    transition: color 0.2s ease;
+}
+
+.login-link:hover {
+    color: #007bff;
+}
+
+.login-link:active {
+    color: #0056b3;
+}
+</style>
+
+<!--this is to wrap comments so text will be kept inside the comment section box-->
+<style>
+.comment-box {
+    text-align: left;
+}
+
+.comment-text {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+</style>
+{% endblock content %}

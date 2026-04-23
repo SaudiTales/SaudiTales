@@ -1,0 +1,255 @@
+{% extends "layouts/base_admin.html" %}
+{% load static %}
+{% block title %} Admin Dashboard {% endblock title %}
+{% block content %}
+
+<h2 class="page-title">Daily analysis</h2>
+
+<!-- Stats cards -->
+<div class="daily-card">
+    <div class="row g-4 mb-4">
+        <div class="col-sm-6 col-lg-3 d-flex">
+            <div class="card-daily shadow-sm h-100 w-100">
+                <div class="card-body">
+                    <h3 class="text-muted"><i class="bi bi-person"></i></h3>
+                    <h3 class="fw-semibold">{{ users_count }}</h3>
+                    <p>Number of registered users</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-3 d-flex">
+            <div class="card-daily shadow-sm h-100 w-100">
+                <div class="card-body">
+                    <h3 class="text-muted"><i class="bi bi-geo-alt-fill"></i></h3>
+                    <h3 class="fw-semibold">{{ landmarks_count }}</h3>
+                    <p>Number of landmarks</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-3 d-flex">
+            <div class="card-daily shadow-sm h-100 w-100">
+                <div class="card-body">
+                    <h3 class="text-muted"><i class="bi bi-chat-left-text"></i></h3>
+                    <h3 class="fw-semibold">{{ comments_count }}</h3>
+                    <p>Comments & stories</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-3 d-flex">
+            <div class="card-daily shadow-sm h-100 w-100">
+                <div class="card-body">
+                    <h3 class="text-muted"><i class="bi bi-image"></i></h3>
+                    <h3 class="fw-semibold">{{ image_ops_count }}</h3>
+                    <p>Number of image recognition operations</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-3 d-flex">
+            <div class="card-daily shadow-sm h-100 w-100">
+                <div class="card-body">
+                    <h3 class="text-muted"><i class="bi bi-exclamation-circle-fill"></i></h3>
+                    <h3 class="fw-semibold">{{ failed_ops_count }}</h3>
+                    <p>Failed operations</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- monthly charts -->
+<h2 class="page-title mt-5">Monthly analysis</h2>
+
+<div class="charts-grid">
+    <div class="chart-card"><canvas id="engagementChart"></canvas></div>
+    <div class="chart-card"><canvas id="viewsChart"></canvas></div>
+    <div class="chart-card"><canvas id="visitsChart"></canvas></div>
+    <div class="chart-card"><canvas id="searchChart"></canvas></div>
+    <div class="chart-card pie-wrapper"><canvas id="featuredChart"></canvas></div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const ctx = document.getElementById('featuredChart').getContext('2d');
+
+    // Data from Django context
+    const destinations = {{ destinations|safe }};
+    const counts = {{ dest_counts|safe }};
+
+    new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: destinations,
+            datasets: [{
+                label: 'Landmarks per Destination',
+                data: counts,
+                backgroundColor: [
+                    '#FF6384', '#36A2EB', '#FFCE56', '#8BC34A', '#FF9800', 
+                    '#9C27B0', '#00BCD4', '#E91E63', '#CDDC39', '#607D8B'
+                ],
+                borderColor: '#fff',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    enabled: true
+                },
+                title: {
+                    display: true,
+                    text: 'Percentage of Landmarks by Destination'
+                }
+            }
+        }
+    });
+});
+
+const imgCtx = document.getElementById('visitsChart').getContext('2d');
+
+new Chart(imgCtx, {
+    type: 'bar',
+    data: {
+        labels: {{ image_labels|safe }},
+        datasets: [
+            {
+                label: 'Successful Recognition',
+                data: {{ success_counts|safe }},
+                backgroundColor: '#36A2EB'
+            },
+            {
+                label: 'Failed Recognition',
+                data: {{ failed_counts|safe }},
+                backgroundColor: '#FF6384'
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'bottom'
+            },
+            title: {
+                display: true,
+                text: 'Image Recognition Monthly Count'
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+const searchCtx = document.getElementById('searchChart').getContext('2d');
+
+new Chart(searchCtx, {
+    type: 'line',
+    data: {
+        labels: {{ activity_labels|safe }},
+        datasets: [{
+            label: 'Activity',
+            data: {{ activity_counts|safe }},
+            borderWidth: 2,
+            fill: false,
+            tension: 0.3
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'bottom'
+            },
+            title: {
+                display: true,
+                text: 'User Activities Over Last 30 Days'
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+const userCtx = document.getElementById('engagementChart').getContext('2d');
+
+new Chart(userCtx, {
+    type: 'line',
+    data: {
+        labels: {{ user_labels|safe }},
+        datasets: [{
+            label: 'New Users',
+            data: {{ user_counts|safe }},
+            borderWidth: 2,
+            fill: false,
+            tension: 0.3
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'bottom'
+            },
+            title: {
+                display: true,
+                text: 'User Growth Over Time'
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+const topViewedCtx = document.getElementById('viewsChart').getContext('2d');
+
+new Chart(topViewedCtx, {
+    type: 'bar',
+    data: {
+        labels: {{ top_viewed_labels|safe }},
+        datasets: [{
+            label: 'Most Viewed Landmarks',
+            data: {{ top_viewed_counts|safe }},
+            backgroundColor: '#FF6384'
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { position: 'bottom' },
+            title: {
+                display: true,
+                text: 'Top 5 Most Viewed Landmarks'
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+</script>
+
+<style>
+.pie-wrapper {
+    height: 280px;   /* adjust to match your original size */
+    max-height: 280px;
+}
+</style>
+{% endblock content %}
